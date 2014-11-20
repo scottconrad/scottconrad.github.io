@@ -1,0 +1,13 @@
+/node_modules/*
+
+/.idea/.DS_Store
+/.idea/.name
+/.idea/encodings.xml
+/.idea/misc.xml
+/.idea/mobiquity.iml
+/.idea/modules.xml
+/.idea/scopes/scope_settings.xml
+/.idea/vcs.xml
+/.idea/workspace.xml
+
+/.DS_Store

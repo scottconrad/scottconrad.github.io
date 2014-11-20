@@ -1,0 +1,14 @@
+{
+  "name": "mobiquity",
+  "version": "0.0.1",
+  "description": "A Code Challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Scott Conrad",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "~3.8.10"
+  }
+}
