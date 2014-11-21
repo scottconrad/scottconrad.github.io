@@ -76,7 +76,7 @@
       getListForDate: function (date) {
         var deferred = $q.defer();
         //code smell.. i know i know.. on a deadline
-        if (!GoogleAuth.getAccessToken()) {
+        if (!GoogleAuth.getAccessToken() || !active_calendar) {
           deferred.resolve([]);
           return deferred.promise;
         }
@@ -152,6 +152,8 @@
 
         //build the data
 
+        //
+
 
         var start_hour = data.start.hour;
 
@@ -167,9 +169,7 @@
 
         moment_date_start.hour(start_hour).minute(data.start.minute);
         moment_date_end.hour(end_hour).minute(data.end.minute);
-
-        data.summary = data.name;
-        delete(data['name']);
+        
 
         data.start = {'dateTime': moment_date_start.format("YYYY-MM-DDTHH:mm:ssZ"), 'timeZone': data.start.timeZone};
         data.end = {'dateTime': moment_date_end.format("YYYY-MM-DDTHH:mm:ssZ"), 'timeZone': data.end.timeZone};
@@ -278,7 +278,7 @@
     }
 
     $scope.event = {
-      name: '',
+      summary: '',
       description: '',
       'start': {
         'hour': '',

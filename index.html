@@ -47,7 +47,7 @@
             <option value="">Choose Calendar</option>
           </select><br/>
           <input type="text" placeholder="Event Name" name="event_name" ng-class="{'error':addEvent.event_name.$error}"
-                 ng-model="event.name" required ng-required/>
+                 ng-model="event.summary" required ng-required/>
           <div class="clearfix"></div>
           <textarea ng-model="event.description" placeholder="Event Description" required name="event_description"
                     ng-class="{'error':addEvent.event_description.$error}"></textarea><br/>
