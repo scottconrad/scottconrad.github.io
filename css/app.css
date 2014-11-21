@@ -152,7 +152,7 @@ body {
 .button {
   border: 0 none;
   border-radius: 3px 3px 3px 3px;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
   display: inline-block;
   font-family: Arial, sans-serif;
@@ -197,10 +197,10 @@ input[type="textarea"] {
   margin: 1% 0;
   min-height: 10%;
   width: 80%;
-  border: 1px silver solid;
+  border: 1px #c0c0c0 solid;
 }
 .section {
-  border: 1px #f3f3f3 solid;
+  border: 1px #c0c0c0 solid;
   padding: 5%;
   background-color: #f9f9f9;
   margin: 5% 0;
@@ -219,7 +219,7 @@ input[type="date"] {
   border-radius: 0;
   height: 34px;
   margin: 1% 0;
-  background-color: white;
+  background-color: #ffffff;
   -webkit-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
   -moz-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
   box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
@@ -323,7 +323,7 @@ ol.calendar-items li.calendar-item {
 }
 ol.calendar-items li.calendar-item ul.event-details {
   font-size: 0.9em;
-  color: silver;
+  color: #c0c0c0;
   font-weight: 100;
 }
 ol.calendar-items li.calendar-item ul.event-details span {

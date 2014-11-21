@@ -107,7 +107,7 @@
 
     <h3>Events for <span ng-show="today_events.length > 1">s</span> : {{::google_calendar.getActiveCalendarName()}} - {{getSelectedDateDisplay()}} </h3>
 
-    <div class="box-content" ng-show="!today_events || today_events.length == 0">
+    <div class="box-content" ng-show="!current_day_events || current_day_events.length == 0">
       <h2>No Events To Display</h2>
 
       <p ng-show="!google_calendar.getActiveCalendarName().length"> Please select a calendar to display.</p>
