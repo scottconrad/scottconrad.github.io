@@ -3,8 +3,7 @@ I had 48 hours to complete this, but I lost about 8 hours due to prior engagemen
 
 [run it here](http://honopu.com/mobiquity)
 
-<code>
-Instructions
+##Instructions
 Please complete the challenge explained below within 48 hours of receiving the assignment. You should try to complete as much of the functionality as you can in the time allotted-- failure to include all functionality will not result in disqualification. To submit, please push the source code to your Github account and email a link to the repository when you are finished.
 
 The assignment
@@ -22,15 +21,6 @@ Additional functionality
 *	Utilize a CSS preprocessor such as LESS or SASS.
 *	Integrate Google Authentication to show the current day’s calendar for any user that authenticates to Google
 
-Grading criteria
-The following will be evaluated in the following order:
-1.	Code quality (40)
-2.	Code organization (15)
-3.	Functions as expected (15)
-4.	Error handling / Negative test cases considered (10)
-5.	Performance (10)
-6.	Includes all required functionality (10)
-</code>
 
 
 ##Results
@@ -39,7 +29,7 @@ I spent some extra time on my own making this look nice. I'm going to leave this
 
 I also intentionally didn't use the GAPI client. I could have used it and generally would have, but I thought with the angular integration i started as my base level it wasn't warranted to use it. I don't like re-inventing the wheel and I always defer to trusted libraries but here I wanted to show what I can do, not that I can google how to use gapi.
 
-###Instructions for Reviewer by bullet item
+###Instructions for Reviewer by Bullet Item
 
 1* Authenticate and select a calendar, the selected date(defaults to today) will be shown. If you change the date, the list updates.
 2* I never understood this one and I emailed to clarify. I would and probably should have just parsed a public rss feed for a calendar but the request was just odd. Technically I could have just loaded in the calendar embedded and solved the requirement but obviously that isn't what you were looking for.  I'm happy to explain further.
