@@ -11,16 +11,16 @@ The assignment
 
 Write a simple Google Calendar app that:
 
-•	Allows the user to select a date to display.
-•	Retrieves and displays the list of events for a hard-coded user account. (I never understood this one and wasn't provided a hard coded user account, if I just needed to parse a rss feed then I could have done that but i wasn't sure)
-•	Allows a user to input a new event for a selected date.
+*	Allows the user to select a date to display.
+*	Retrieves and displays the list of events for a hard-coded user account. (I never understood this one and wasn't provided a hard coded user account, if I just needed to parse a rss feed then I could have done that but i wasn't sure)
+*	Allows a user to input a new event for a selected date.
 
 Additional functionality
 
-•	Utilize responsive web design for Print Layout, iPad, iPad Mini, or Samsung Galaxy Tab resolution.
-•	Utilize an MVC framework such as Ember, Backbone, or AngularJS.
-•	Utilize a CSS preprocessor such as LESS or SASS.
-•	Integrate Google Authentication to show the current day’s calendar for any user that authenticates to Google
+*	Utilize responsive web design for Print Layout, iPad, iPad Mini, or Samsung Galaxy Tab resolution.
+*	Utilize an MVC framework such as Ember, Backbone, or AngularJS.
+*	Utilize a CSS preprocessor such as LESS or SASS.
+*	Integrate Google Authentication to show the current day’s calendar for any user that authenticates to Google
 
 Grading criteria
 The following will be evaluated in the following order:
@@ -41,14 +41,14 @@ I also intentionally didn't use the GAPI client. I could have used it and genera
 
 ###Instructions for Reviewer by bullet item
 
-1. Authenticate and select a calendar, the selected date(defaults to today) will be shown. If you change the date, the list updates.
-2. I never understood this one and I emailed to clarify. I would and probably should have just parsed a public rss feed for a calendar but the request was just odd. Technically I could have just loaded in the calendar embedded and solved the requirement but obviously that isn't what you were looking for.  I'm happy to explain further.
-3. This works fine, its the form on the left side.
+1* Authenticate and select a calendar, the selected date(defaults to today) will be shown. If you change the date, the list updates.
+2* I never understood this one and I emailed to clarify. I would and probably should have just parsed a public rss feed for a calendar but the request was just odd. Technically I could have just loaded in the calendar embedded and solved the requirement but obviously that isn't what you were looking for.  I'm happy to explain further.
+3* This works fine, its the form on the left side. Please note when you add an event it updates the list as well for the selected calendar.
 Additional Functionality
-4. This is a bit of a dumb example from a UI perspective but the elements stack on an ipad
-5. I used angular from the start, the recruiter said it was ok since I had planned to implement everything
-6. I am using gulp that builds the .less into css
-7.  The app does this from the start, when you authenticate you are given your list of calendars, when you select a calendar then today's events are shown above all of the events
+4* This is a bit of a dumb example from a UI perspective but the elements stack on an ipad
+5* I used angular from the start, the recruiter said it was ok since I had planned to implement everything
+6* I am using gulp that builds the .less into css
+7*  The app does this from the start, when you authenticate you are given your list of calendars, when you select a calendar then today's events are shown above all of the events
 
 
 ##Thoughts
@@ -64,6 +64,8 @@ I think this is fairly robust, but given the timeline and my previous commitment
 * Recurring events aren't currently supported, not mentioned. I used the API to sort the events for me, otherwise they were coming back in a really weird order. I figured order was more important
 
 * If you have a ton of events, you'll eventually hit paging and not load all of them. I could have listened for the page result i believe in the responses then fired an append event.. but given the time I didn't think this was necessary and only think it's worth mentioning that I did in fact think of that.
+
+* I should have created a UI element and a http Interceptor that showed and hid when we were pulling something from the API. I did this on the rental application so I know how to do it but I just didn't get to it on this.
 
 ##Fun
 
