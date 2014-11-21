@@ -15,6 +15,7 @@
       display: none !important;
     }
   </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body ng-app="Mobiquity.googleCalendar" ng-controller="MainController" ng-cloak>
 <div class="w90 centered">
@@ -29,7 +30,11 @@
               ng-change="getListForSelectedCalendar(i)">
         <option value="">Please Choose A Calendar</option>
       </select>
-      <label for="date-picker">Choose Date To Display:</label> <input type="date" id="date-picker" ng-model="selected_date"
+      <label for="date-picker">Choose Date To Display:</label>
+      <div class="clearfix"></div>
+
+
+      <input type="date" id="date-picker" ng-model="selected_date"
                                                                       ng-change="dateChanged()"/>
     </div>
     <div class="section">

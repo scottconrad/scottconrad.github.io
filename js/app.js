@@ -20,6 +20,7 @@
             access_token = decodeURIComponent(m[2]);
             this.setTokenValid();
             this.setTokenRejected(false);
+            localStorage.setItem('mobiquity.access_token',access_token);
           }
         }
       },
@@ -43,8 +44,14 @@
       },
       setTokenRejected:function(bool){
         token_rejected = bool;
+      },
+      populateTokenFromLocalStorage:function(){
+        var mob_access_token = localStorage.get('mobiquity.access_token');
+        //there is an api to check if an access token is invalid but I didn't implement it
+        if(mob_access_token !== null) access_token = mob_access_token;
+        //while we are using it.. the first request will trigger an error
       }
-    }
+    }l
 
     //ugh
     $rootScope.$on('authentication.invalid', function () {
@@ -52,6 +59,8 @@
       obj.setTokenInvalid();
       obj.setTokenRejected(true);
     });
+
+    obj.populateAccessTokenFromLocalStorage();
 
 
     return obj;
