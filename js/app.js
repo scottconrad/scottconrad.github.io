@@ -169,7 +169,7 @@
 
         moment_date_start.hour(start_hour).minute(data.start.minute);
         moment_date_end.hour(end_hour).minute(data.end.minute);
-        
+
 
         data.start = {'dateTime': moment_date_start.format("YYYY-MM-DDTHH:mm:ssZ"), 'timeZone': data.start.timeZone};
         data.end = {'dateTime': moment_date_end.format("YYYY-MM-DDTHH:mm:ssZ"), 'timeZone': data.end.timeZone};
