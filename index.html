@@ -22,7 +22,7 @@
       <a class="button blue large" ng-hide="authenticatedAndValid()" href="{{::authorize_url}}">Authenticate with Google</a>
       <div class="clearfix"></div>
 
-      <select ng-model="calendar_id" ng-options="i.id as i.summary for i in calendars" class="w20m clear"
+      <select ng-model="calendar" ng-options="i as i.summary for i in calendars" class="w20m clear"
               ng-change="getListForSelectedCalendar(i)">
         <option value="">Please Choose A Calendar</option>
       </select>
@@ -42,9 +42,9 @@
             Create New Event
           </legend>
 
-          <select ng-model="event.calendar_id" ng-class="{'error':addEvent.event_calendar_id.$error}"
-                  name="event_calendar_id" ng-change="updateEventDataFromCalendar(i)"
-                  ng-options="i.id as i.summary for i in calendars" required>
+          <select ng-model="event.calendar" ng-class="{'error':addEvent.event_calendar_id.$error}"
+                  name="event_calendar_id"  ng-change="updateEventDataFromCalendar(event.calendar)"
+                  ng-options="i as i.summary for i in calendars" required>
             <option value="">Choose Calendar</option>
           </select><br/>
 
@@ -95,7 +95,8 @@
           </select>
         </fieldset>
         <div class="clearfix"></div>
-        <input type="submit" class="button red large" ng-submit ng-click="createEvent()" value="Create Event"/>
+
+        <input type="submit" class="button red large" ng-class="{'animated infinite pulse':addEvent.$valid}" ng-submit ng-click="createEvent()" value="Create Event"/>
       </form>
     </div>
 
@@ -105,7 +106,7 @@
 
   <div class="w70 left results">
 
-    <h3>Events for <span ng-show="today_events.length > 1">s</span> : {{::google_calendar.getActiveCalendarName()}} - {{getSelectedDateDisplay()}} </h3>
+    <h3>Events for <span ng-show="today_events.length > 1">s</span> : {{getActiveCalendarName()}} - {{getSelectedDateDisplay()}} </h3>
 
     <div class="box-content" ng-show="!current_day_events || current_day_events.length == 0">
       <h2>No Events To Display</h2>
@@ -117,10 +118,10 @@
       <li class="calendar-item" ng-repeat="event in current_day_events">
         <div class="inner">
           <div>
-            <h3>{{::event.summary}}</h3>
+            <h3>{{event.summary}}</h3>
             <ul class="event-details">
-              <li><span>Starts:</span>{{::formatEventDate(event.start.dateTime)}}</li>
-              <li><span>Ends:</span>{{::formatEventDate(event.end.dateTime)}}</li>
+              <li><span>Starts:</span>{{formatEventDateTime(event.start.dateTime)}}</li>
+              <li><span>Ends:</span>{{formatEventDateTime(event.end.dateTime)}}</li>
               <li><a ng-href="{{::event.htmlLink}}" class="button red">Details</a></li>
             </ul>
           </div>
@@ -129,7 +130,7 @@
     </ol>
 
 
-    <h3>{{::google_calendar.getActiveCalendarName()}} - Events</h3>
+    <h3>{{getActiveCalendarName()}} - Events</h3>
 
     <div class="box-content" ng-show="!calendar_events || calendar_events.length == 0">
       <h2>No Events To Display</h2>
@@ -140,10 +141,11 @@
       <li class="calendar-item" ng-repeat="event in calendar_events">
         <div class="inner">
           <div>
-            <h3>{{::event.summary}}</h3>
+            <h3>{{event.summary}}</h3>
             <ul class="event-details">
-              <li><span>Starts:</span>{{::formatEventDate(event.start.dateTime)}}</li>
-              <li><span>Ends:</span>{{::formatEventDate(event.end.dateTime)}}</li>
+              {{event | json }}
+              <li><span>Starts:</span>{{formatEventDateTime(event.start.dateTime)}}</li>
+              <li><span>Ends:</span>{{formatEventDateTime(event.end.dateTime)}}</li>
               <li><a ng-href="{{::event.htmlLink}}" class="button red" target="_blank">Details</a></li>
             </ul>
           </div>

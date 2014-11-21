@@ -70,7 +70,7 @@
       },
 
       getActiveCalendarName:function(){ //i should call get get summary but I think name is better
-        if(active_calendar && active_calendar.summary) return active_calendar.summary;
+       if(active_calendar && active_calendar.summary) return active_calendar.summary;
       },
 
       getListForDate: function (date) {
@@ -208,8 +208,10 @@
             //$injector.get('GoogleAuth').setInvalidToken();  not sure why this isn't working... says it isn't found, but i'm using it
             //I know this is a judo
             $rootScope.$broadcast('authentication.invalid'); //ugh i hate this perhaps I can circle back later
+          }else{
+            alert("There was an error retrieving data from the google api");
           }
-          console.log("resp is:", resp);
+
           return $q.reject(resp);
         }
       }
@@ -248,32 +250,35 @@
       }
       $scope.minutes.push(increment);
     }
-
-
+    
     $scope.calendar_id = null;
 
     $scope.calendars = [];
     $scope.calendar_events = [];
 
-    $scope.selected_date = new Date();
+    $scope.calendar = null;
 
+    $scope.selected_date = moment().toDate();
 
-    $scope.dateChanged = function () {
+    ///////
+    $scope.formatEventDate = function(date,format){
+      console.log("the date is:",date);
+      if (!format) format = "MMMM Do, YYYY [at] h:mma";
+      var formatted_date = moment(date).format(format);
+     return formatted_date;
 
-      console.log("the date changed");
     }
 
-    $scope.formatEventDate = function(date,format){
-      if (!format) format = "MMMM do, YYYY [at] h:mma";
-      var formatted_date = moment(date).format(format);
-      console.log('formatted date is', formatted_date);
-      return formatted_date;
+    $scope.formatEventDateTime = function(dt){
+      var format = "MMMM Do, YYYY [at] h:mma";
+      return moment(dt).format(format);
 
     }
 
     $scope.getSelectedDateDisplay = function(){
-      var format = 'MMMM do, YYYY';
-      return $scope.formatEventDate(this.selected_date,format);
+      var format = 'MMMM Do, YYYY';
+
+      return $scope.formatEventDate(angular.copy($scope.selected_date),format);
     }
 
     $scope.event = {
@@ -291,7 +296,8 @@
         'meridian': '',
         'timeZone': ''
       },
-      'calendar_id': ''
+      'calendar_id': '',
+      'calendar':null
     }
 
 
@@ -304,24 +310,17 @@
       return $scope.google_auth.getAccessToken() && $scope.google_auth.getAccessToken().length > 0 && $scope.google_auth.getTokenRejected();
     }
 
-
     $scope.createEvent = function () {
       var valid = $scope.addEvent.$valid;
-
       if (valid) {
         $scope.google_calendar.createEvent($scope.event).then(function(){
           $scope.getListForSelectedCalendar($scope.google_calendar.getActiveCalendar());
+          $scope.addEvent.$setSubmitted(false);
         });
-        $timeout(function () {
-
-        });
-        $scope.addEvent.$setSubmitted(false);
-
-
       }
     }
 
-
+    ///////
     $scope.google_auth.parseGoogleAuthTokenFromCurrentLocation();
 
 
@@ -331,27 +330,30 @@
       });
     }
 
-    $scope.updateEventDateFromCalendar = function (calendar) {
-      $scope.event.start.timeZone = $scope.event.end.timeZone = calendar.timeZone;
+    $scope.updateEventDataFromCalendar = function () {
+      $scope.event.calendar_id = $scope.event.calendar.id;
+      $scope.event.start.timeZone = $scope.event.end.timeZone = $scope.event.calendar.timeZone;
 
     }
 
+    $scope.getListForSelectedCalendar = function () {
+      $scope.current_day_events = [];
+      $scope.calendar_events = [];
+      if(!$scope.calendar || !$scope.calendar.id) return;
+      //i was just getting the id before, but refactored this so I can get the name of the calendar..
+      //i could also do this when I get the event list for a calendar but I like it this way better.
 
-    $scope.getListForSelectedCalendar = function (calendar) {
-
-      var encoded = encodeURIComponent($scope.calendar_id); //
-      $scope.google_calendar.setActiveCalendar(calendar);
+      var encoded = encodeURIComponent($scope.calendar.id); //
+      $scope.google_calendar.setActiveCalendar($scope.calendar);
       $scope.google_calendar.getListForCalendarId(encoded).then(function (data) {
         $scope.calendar_events = data;
 
       });
 
-      $scope.google_calendar.getListForCurrentDate().then(function (data) {
-        console.log("our current day list is:", data);
-        $scope.current_day_events = data;
-      });
+      $scope.dateChanged(); //trigger this here since that happens about as often but that can trigger a day update..
+      //but you can selet a date and not change the calendar so it should update
+      }
 
-    }
     $scope.$watch('google_auth.access_token', function () {
       $scope.getCalendarList(); //this could probably be named better.. slike populate calendar list
 
@@ -365,8 +367,19 @@
     }
 
 
-    $scope.updateEventCalendar = function (i) {
-      $scope.google_calendar.setActiveCalendar(i);
+
+    $scope.dateChanged = function(){
+      $scope.google_calendar.getListForCurrentDate().then(function (data) {
+        //console.log("our current day list is:", data);
+        $scope.current_day_events = data;
+      });
+    }
+
+
+
+
+    $scope.getActiveCalendarName = function(){
+     if($scope.calendar && $scope.calendar.hasOwnProperty('summary')) return $scope.calendar.summary;
     }
 
   });
