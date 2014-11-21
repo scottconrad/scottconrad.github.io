@@ -14,7 +14,6 @@
     }
   }
 
-
   var google_module = angular.module('Google', []);
 
   google_module.service('GoogleAuth', function ($location, $http, $rootScope) {
@@ -63,7 +62,7 @@
       populateAccessTokenFromLocalStorage:function(){
         var mob_access_token = localStorage['mobiquity_access_token'];
         //there is an api to check if an access token is invalid but I didn't implement it
-        console.log(mob_access_token);
+
         if(util.set(mob_access_token)) {
           token_valid = true; //we trust that it's still valid, the first request again triggers an error if it isn't
           access_token = mob_access_token;
@@ -72,7 +71,8 @@
       }
     }
 
-    //ugh
+    //ugh this is the part i mentioned I'm not happy about.. it's a workaround but not the end of the world
+    //might be a bug in angular or i needed to make a reference somewhere else and point ot that, ran out of time
     $rootScope.$on('authentication.invalid', function () {
 
       obj.setTokenInvalid();
@@ -103,15 +103,16 @@
 
       getListForDate: function (date) {
         var deferred = $q.defer();
-        //code smell.. i know i know.. on a deadline
         if (!GoogleAuth.getAccessToken() || !util.set(active_calendar)) {
           deferred.resolve([]);
           return deferred.promise;
         }
 
         var day = moment(date);
+        //copy it
         var day2 = moment(date);
 
+        //set it to the start of the day
         var min_time = day.startOf('day').toISOString();
         var max_time = day2.startOf('day').add(1, 'day').toISOString();
 
@@ -330,7 +331,7 @@
     }
 
     $scope.$watch('event',function(){
-      console.log("we got an event");
+
       var start_hour = parseInt($scope.event.start.hour);
 
       var start_minute = parseInt($scope.event.start.minute);
@@ -372,7 +373,6 @@
 
     }
 
-
     $scope.authenticatedAndValid = function(){
       return $scope.google_auth.tokenValid() && !$scope.google_auth.getTokenRejected();
     }
@@ -387,21 +387,21 @@
       var valid = $scope.addEvent.$valid;
       $scope.event_form_reset = false;
       if (valid) {
-        $scope.google_calendar.createEvent($scope.event).then(function(){
+        var event = angular.copy($scope.event); //get a copy so we can reset it
+
+        $scope.resetEvent();
+
+        $scope.google_calendar.createEvent(event).then(function(){
           //at this point we may not necessarily have an active calendar
           if(util.set($scope.google_calendar.getActiveCalendar())){
             $scope.getListForSelectedCalendar($scope.google_calendar.getActiveCalendar());
           }
           $scope.addEvent.$submitted = false;
           //save it
-          console.log($scope.addEvent);
-          //this will reset
-          $scope.resetEvent();
 
         });
       }
     }
-
 
     $scope.google_auth.parseGoogleAuthTokenFromCurrentLocation();
 
@@ -460,14 +460,9 @@
       });
     }
 
-
-
     $scope.dateChanged = function(){
       $scope.getEventsForDate();
     }
-
-
-
 
     $scope.getActiveCalendarName = function(){
       if($scope.calendar && $scope.calendar.hasOwnProperty('summary')) return $scope.calendar.summary;

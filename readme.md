@@ -57,6 +57,10 @@ I think this is fairly robust, but given the timeline and my previous commitment
 
 * I should have created a UI element and a http Interceptor that showed and hid when we were pulling something from the API. I did this on the rental application so I know how to do it but I just didn't get to it on this.
 
+* There may be some time zone issues, there usually are, but I am saving to the selected calendar's time zone so it should be ok.
+
 ##Fun
 
 It was a lot of fun to do this, and I did really gold plate some stuff that I usually wouldn't. It's also great that anyone will be able to see this and be able to quickly judge my capability.
+
+Thanks!
