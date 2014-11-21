@@ -298,7 +298,7 @@
     }
 
     $scope.formatEventDate = function(date,format){
-      if (!format) format = "MMMM do, YYYY";
+      if (!format) format = "MMMM do, YYYY [at] h:mma";
       var formatted_date = moment(date).format(format);
       console.log('formatted date is', formatted_date);
       return formatted_date;
@@ -376,7 +376,7 @@
 
 
     $timeout(function(){
-      return;
+      //return;
       $scope.current_day_events = [
           {
             "kind": "calendar#event",
