@@ -7,6 +7,7 @@
     var access_token = null;
     var client_id = '682690953089-pcokcr123r9m8v602p0rv9bi9vkfcsc0.apps.googleusercontent.com';
     var token_valid = false;
+    var token_rejected = false;
 
     var obj = {
       ajaxing: false, //are we doing something?
@@ -18,6 +19,7 @@
           if (m[1] == "access_token") {
             access_token = decodeURIComponent(m[2]);
             this.setTokenValid();
+            this.setTokenRejected(false);
           }
         }
       },
@@ -35,13 +37,20 @@
       },
       tokenValid: function () {
         return token_valid;
+      },
+      getTokenRejected:function(){
+        return token_rejected;
+      },
+      setTokenRejected:function(bool){
+        token_rejected = bool;
       }
     }
 
     //ugh
     $rootScope.$on('authentication.invalid', function () {
-      alert("we're lame");
+
       obj.setTokenInvalid();
+      obj.setTokenRejected(true);
     });
 
 
@@ -60,8 +69,8 @@
 
       },
 
-      getActiveCalendarName:function(){
-        if(active_calendar && active_calendar.name) return active_calendar.name;
+      getActiveCalendarName:function(){ //i should call get get summary but I think name is better
+        if(active_calendar && active_calendar.summary) return active_calendar.summary;
       },
 
       getListForDate: function (date) {
@@ -173,6 +182,9 @@
         }).success(function (data) {
           return data;
         });
+      },
+      setActiveCalendar:function(calendar){
+        active_calendar = calendar;
       }
     }
   });
@@ -207,8 +219,11 @@
 
   application.controller('MainController', function ($scope, GoogleAuth, GoogleCalendar, $location, $window, $timeout) {
 
+    $scope.google_auth = GoogleAuth;
+    $scope.google_calendar = GoogleCalendar;
+
     $scope.authorize_url = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=http%3A%2F%2Fhonopu.com' +
-    '%2Fmobiquity&response_type=token&client_id={{google_auth.getClientID()}}&scope=email+https%3A%2F%2F' +
+    '%2Fmobiquity&response_type=token&client_id=' + $scope.google_auth.getClientID() + '&scope=email+https%3A%2F%2F' +
     'www.googleapis.com%2Fauth%2Fcalendar+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar&approval_prompt=force';
 
 
@@ -218,33 +233,24 @@
 
 
     for (var i = 1; i <= 12; i++) {
-
       $scope.hours.push(i);
     }
 
     for (var i = 0; i <= 11; i++) {
       var increment = i * 5;
-
       if (increment <= 5) {
-
         increment = "0" + increment; //there's about a billion ways to do this, this was the easiest
-
       }
-
-
       $scope.minutes.push(increment);
     }
 
-
-    $scope.google_auth = GoogleAuth;
-    $scope.google_calendar = GoogleCalendar;
 
     $scope.calendar_id = null;
 
     $scope.calendars = [];
     $scope.calendar_events = [];
 
-    $scope.selected_date = null;
+    $scope.selected_date = new Date();
 
     $scope.dateChanged = function () {
 
@@ -288,10 +294,6 @@
     $scope.google_auth.parseGoogleAuthTokenFromCurrentLocation();
 
 
-    $scope.getCalendarEvents = function () {
-
-
-    }
     $scope.getCalendarList = function () {
       $scope.google_calendar.getList().then(function (data) {
         $scope.calendars = data;
@@ -304,13 +306,13 @@
     }
 
 
-    $scope.getListForSelectedCalendar = function () {
+    $scope.getListForSelectedCalendar = function (calendar) {
 
       var encoded = encodeURIComponent($scope.calendar_id); //
-
-
+      $scope.google_calendar.setActiveCalendar(calendar);
       $scope.google_calendar.getListForCalendarId(encoded).then(function (data) {
         $scope.calendar_events = data;
+
       });
 
       $scope.google_calendar.getListForCurrentDate().then(function (data) {
@@ -319,6 +321,10 @@
       });
 
     }
+
+
+    
+
 
     $scope.$watch('google_auth.access_token', function () {
       $scope.getCalendarList(); //this could probably be named better.. slike populate calendar list

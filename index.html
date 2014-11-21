@@ -18,93 +18,95 @@
   </div>
 
   <div class="w30 left outline">
-
-    <a class="button blue large" href="{{::authorize_url}}">Authorize with Google</a>
-    <div class="clearfix"></div>
-
-    <select ng-model="calendar_id" ng-options="i.id as i.summary for i in calendars" class="w20m clear"
-            ng-change="getListForSelectedCalendar()">
-      <option value="">Please Choose A Calendar</option>
-    </select>
-
-
-        <label for="date-picker">Choose Date To Display:</label> <input type="date" id="date-picker" ng-model="selected_date" ng-change="dateChanged()"/>
-
-
-    <form name="addEvent" novalidate>
-
-      <fieldset>
-        <legend>
-          Create New Event
-        </legend>
-
-      <select ng-model="event.calendar_id" ng-class="{'error':addEvent.event_calendar_id.$error}"
-              name="event_calendar_id" ng-change="updateEventDataFromCalendar(i)"
-              ng-options="i.id as i.summary for i in calendars" required>
-        <option value="">Choose Calendar</option>
-      </select><br/>
-
-      <input type="text" placeholder="Event Name" name="event_name" ng-class="{'error':addEvent.event_name.$error}"
-             ng-model="event.name" required ng-required/>
-
+    <div class="section">
+      <a class="button blue large" href="{{::authorize_url}}">Authenticate with Google</a>
       <div class="clearfix"></div>
-      <textarea ng-model="event.description" placeholder="Event Description" required name="event_description"
-                ng-class="{'error':addEvent.event_description.$error}"></textarea><br/>
 
-
-      <label>Choose Date:</label>
-      <input type="date" ng-model="event.start.date" name="event_start_date" required
-             ng-class="{'error':addEvent.event_start_date.$error}"
-             ng-change="dateChanged()"/>
-
-      <h2>Start</h2>
-      <select name="event_start_hours" required ng-model="event.start.hour"
-              ng-class="{'error':addEvent.event_start_hours.$error}" ng-options="i for i in hours" class="w20">
-        <option value="">Choose Hour</option>
-      </select>:
-      <select name="event_start_minutes" required ng-class="{'error':addEvent.event_start_minutes.$error}" class="w20"
-              ng-model="event.start.minute" ng-options="i for i in minutes">
-        <option value="">Choose Minute</option>
-      </select>
-      <select name="event_start_meridian" ng-class="{'error':addEvent.event_start_meridian.$error}" class="w20" required
-              ng-model="event.start.meridian">
-        <option value="">Choose AM/PM</option>
-        <option value="1">am</option>
-        <option value="2">pm</option>
+      <select ng-model="calendar_id" ng-options="i.id as i.summary for i in calendars" class="w20m clear"
+              ng-change="getListForSelectedCalendar(i)">
+        <option value="">Please Choose A Calendar</option>
       </select>
 
-      <h2>Ending</h2>
 
-      <select name="event_end_hours" required ng-model="event.end.hour"
-              ng-class="{'error':addEvent.event_end_hours.$error}" ng-options="i for i in hours" class="w20">
-        <option value="">Choose Hour</option>
-      </select>:
-      <select name="event_end_minutes" required ng-class="{'error':addEvent.event_end_minutes.$error}"
-              ng-model="event.end.minute" ng-options="i for i in minutes" class="w20">
-        <option value="">Choose Minute</option>
-      </select>
-      <select name="event_end_meridian" ng-class="{'error':addEvent.event_end_meridian.$error}" required class="w20"
-              ng-model="event.end.meridian">
-        <option value="">Choose AM/PM</option>
-        <option value="1">am</option>
-        <option value="2">pm</option>
-      </select>
-  </fieldset>
-      <div class="clearfix"></div>
-      <input type="submit" class="button blue large" ng-submit ng-click="createEvent()" value="Create Event"/>
-    </form>
+      <label for="date-picker">Choose Date To Display:</label> <input type="date" id="date-picker" ng-model="selected_date" ng-change="dateChanged()"/>
+
+    </div>
+    <div class="section">
+      <form name="addEvent" novalidate>
+
+        <fieldset>
+          <legend>
+            Create New Event
+          </legend>
+
+          <select ng-model="event.calendar_id" ng-class="{'error':addEvent.event_calendar_id.$error}"
+                  name="event_calendar_id" ng-change="updateEventDataFromCalendar(i)"
+                  ng-options="i.id as i.summary for i in calendars" required>
+            <option value="">Choose Calendar</option>
+          </select><br/>
+
+          <input type="text" placeholder="Event Name" name="event_name" ng-class="{'error':addEvent.event_name.$error}"
+                 ng-model="event.name" required ng-required/>
+
+          <div class="clearfix"></div>
+          <textarea ng-model="event.description" placeholder="Event Description" required name="event_description"
+                    ng-class="{'error':addEvent.event_description.$error}"></textarea><br/>
+
+
+          <label>Choose Date:</label>
+          <input type="date" ng-model="event.start.date" name="event_start_date" required
+                 ng-class="{'error':addEvent.event_start_date.$error}"
+                 ng-change="dateChanged()"/>
+
+          <h2>Start</h2>
+          <select name="event_start_hours" required ng-model="event.start.hour"
+                  ng-class="{'error':addEvent.event_start_hours.$error}" ng-options="i for i in hours" class="w20">
+            <option value="">Choose Hour</option>
+          </select>:
+          <select name="event_start_minutes" required ng-class="{'error':addEvent.event_start_minutes.$error}" class="w20"
+                  ng-model="event.start.minute" ng-options="i for i in minutes">
+            <option value="">Choose Minute</option>
+          </select>
+          <select name="event_start_meridian" ng-class="{'error':addEvent.event_start_meridian.$error}" class="w20" required
+                  ng-model="event.start.meridian">
+            <option value="">Choose AM/PM</option>
+            <option value="1">am</option>
+            <option value="2">pm</option>
+          </select>
+
+          <h2>Ending</h2>
+
+          <select name="event_end_hours" required ng-model="event.end.hour"
+                  ng-class="{'error':addEvent.event_end_hours.$error}" ng-options="i for i in hours" class="w20">
+            <option value="">Choose Hour</option>
+          </select>:
+          <select name="event_end_minutes" required ng-class="{'error':addEvent.event_end_minutes.$error}"
+                  ng-model="event.end.minute" ng-options="i for i in minutes" class="w20">
+            <option value="">Choose Minute</option>
+          </select>
+          <select name="event_end_meridian" ng-class="{'error':addEvent.event_end_meridian.$error}" required class="w20"
+                  ng-model="event.end.meridian">
+            <option value="">Choose AM/PM</option>
+            <option value="1">am</option>
+            <option value="2">pm</option>
+          </select>
+        </fieldset>
+        <div class="clearfix"></div>
+        <input type="submit" class="button blue large" ng-submit ng-click="createEvent()" value="Create Event"/>
+      </form>
+    </div>
 
 
   </div>
 
 
-  <div class="w70 right outline">
+  <div class="w70 left results">
 
 
 
-    <h3>Today's Event<span ng-show="today_events.length > 1">s</span> for {{::google_calendar.getActiveCalendarName()}} </h3>
+    <h3>Events for <span ng-show="today_events.length > 1">s</span> : {{::google_calendar.getActiveCalendarName()}} {{::selected_date_string}} </h3>
     <ol class="calendar-items">
-      <li class="calendar-item" ng-repeat="event in today_events">
+      <li class="calendar-item" ng-repeat="event in current_day_events">
         <div class="inner">
           <div><img ng-src="{{event.gadget.iconLink}}" class="calendar-item-icon" alt="{{::event.summary}}"/>
 
@@ -130,7 +132,7 @@
     </ol>
   </div>
 
-  </div>
+</div>
 
 
 

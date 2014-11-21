@@ -138,10 +138,20 @@ body {
   -webkit-touch-callout: none;
   font-size: 16px;
 }
+.shadow {
+  -webkit-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
+  -moz-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
+  box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
+}
+.lighter-shadow {
+  -webkit-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.12);
+  -moz-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.12);
+  box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.12);
+}
 /* Button */
 .button {
   border: 0 none;
-  border-radius: 2px 2px 2px 2px;
+  border-radius: 3px 3px 3px 3px;
   color: #FFFFFF;
   cursor: pointer;
   display: inline-block;
@@ -149,8 +159,8 @@ body {
   font-size: 0.8em;
   font-weight: bold;
   line-height: 1.6em;
-  margin-bottom: 0;
-  margin-top: 10px;
+  margin-bottom: 5%;
+  margin-top: 1%;
   padding: 7px 10px;
   text-transform: none;
   text-decoration: none;
@@ -166,7 +176,6 @@ body {
 .button.large {
   width: 75%;
   padding: 10px 15px;
-  margin: 0 auto;
 }
 .button:hover {
   background-color: #333;
@@ -178,10 +187,24 @@ textarea {
 .little-margin {
   margin: 1% 0;
 }
+.more-margin {
+  margin: 5% 0;
+}
 input[type="textarea"] {
   margin: 1% 0;
   min-height: 10%;
   width: 80%;
+  border: 1px silver solid;
+}
+div.section {
+  border: 1px silver solid;
+  padding: 5%;
+  background-color: #ecf0f1;
+  margin: 5% 0;
+  border-radius: 5px;
+  -webkit-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.12);
+  -moz-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.12);
+  box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.12);
 }
 select,
 input[type="date"] {
@@ -194,9 +217,12 @@ input[type="date"] {
   height: 34px;
   margin: 1% 0;
   background-color: white;
+  -webkit-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
+  -moz-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
+  box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
 }
 input[type="text"] {
-  width: 50%;
+  width: 77.9%;
   padding: 5px;
   height: 34px;
   margin: 1% 0;
@@ -220,12 +246,15 @@ form {
 .w100 {
   width: 100%;
 }
+.w30 {
+  width: 30%;
+}
 .w50 {
   width: 50%;
 }
 .w20 {
   width: 20%;
-  min-width: 130px;
+  min-width: 120px;
 }
 .w70 {
   width: 70%;
@@ -261,4 +290,9 @@ label {
   float: left;
   width: 100%;
   margin: 1% 0;
+}
+div.results {
+  box-sizing: border-box;
+  padding: 3%;
+  padding-top: 1%;
 }
