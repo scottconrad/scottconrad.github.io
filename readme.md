@@ -1,7 +1,7 @@
 ##Coding Test
 I had 48 hours to complete this, but I lost about 8 hours due to prior engagements.  A bit of whirlwind but it was fun. I spent some time making it look good.
 
-[http://honopu.com/mobiquity](run it here)
+[run it here](http://honopu.com/mobiquity)
 
 <code>
 Instructions
