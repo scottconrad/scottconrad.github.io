@@ -132,7 +132,6 @@
       getListForCalendarId: function (id) {
 
         var deferred = $q.defer();
-        console.log('get list was called');
         active_calendar = id;
         $http({
           'method': 'GET',
@@ -150,8 +149,6 @@
       createEvent: function (data) {
 
         //translate the data into something it wants....
-
-        console.log('the passed in data is:', data);
 
         //build the data
 
@@ -262,7 +259,6 @@
 
     ///////
     $scope.formatEventDate = function(date,format){
-      console.log("the date is:",date);
       if (!format) format = "MMMM Do, YYYY [at] h:mma";
       var formatted_date = moment(date).format(format);
       return formatted_date;
@@ -316,7 +312,8 @@
       var valid = $scope.addEvent.$valid;
       if (valid) {
         $scope.google_calendar.createEvent($scope.event).then(function(){
-          $scope.getListForSelectedCalendar($scope.google_calendar.getActiveCalendar());
+          //at this point we may not necessarily have an active calendar
+          if($scope.google_calendar.getActiveCalendar()) $scope.getListForSelectedCalendar($scope.google_calendar.getActiveCalendar());
           $scope.addEvent.$setSubmitted(false);
         });
       }
