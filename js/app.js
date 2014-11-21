@@ -132,7 +132,8 @@
           'method': 'GET',
           'params': {
             'timeMin': min_time,
-            'timeMax': max_time
+            'timeMax': max_time,
+            'orderBy':'startTime'
           },
           'url': 'https://www.googleapis.com/calendar/v3/calendars/' + active_calendar.toString() + '/events',
           'headers': this.getAuthHeaderData()
@@ -174,7 +175,7 @@
         active_calendar = id;
         $http({
           'method': 'GET',
-          'url': 'https://www.googleapis.com/calendar/v3/calendars/' + id.toString() + '/events',
+          'url': 'https://www.googleapis.com/calendar/v3/calendars/' + id.toString() + '/events?orderBy=startTime',
           'headers': this.getAuthHeaderData()
         }).success(function (data) {
           //get ourselves a list we can populate a dropdown from
