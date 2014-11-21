@@ -63,7 +63,8 @@
       populateAccessTokenFromLocalStorage:function(){
         var mob_access_token = localStorage['mobiquity_access_token'];
         //there is an api to check if an access token is invalid but I didn't implement it
-        if(mob_access_token !== null) {
+        console.log(mob_access_token);
+        if(util.set(mob_access_token)) {
           token_valid = true; //we trust that it's still valid, the first request again triggers an error if it isn't
           access_token = mob_access_token;
         }
@@ -356,7 +357,7 @@
       if(start_meridian > end_meridian){
         $scope.event.end.meridian = start_meridian;
       }
-      
+
     },true);
 
 
