@@ -1,8 +1,8 @@
 ##Coding Test
 I had 48 hours to complete this, but I lost about 8 hours due to prior engagements.  A bit of whirlwind but it was fun. I spent some time making it look good.
 
-[code]
 
+<code>
 Instructions
 Please complete the challenge explained below within 48 hours of receiving the assignment. You should try to complete as much of the functionality as you can in the time allotted-- failure to include all functionality will not result in disqualification. To submit, please push the source code to your Github account and email a link to the repository when you are finished.
 
@@ -29,4 +29,4 @@ The following will be evaluated in the following order:
 4.	Error handling / Negative test cases considered (10)
 5.	Performance (10)
 6.	Includes all required functionality (10)
-[/code]
+</code>
