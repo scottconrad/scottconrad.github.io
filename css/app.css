@@ -196,7 +196,7 @@ input[type="textarea"] {
   width: 80%;
   border: 1px silver solid;
 }
-div.section {
+.section {
   border: 1px silver solid;
   padding: 5%;
   background-color: #ecf0f1;
@@ -295,4 +295,25 @@ div.results {
   box-sizing: border-box;
   padding: 3%;
   padding-top: 1%;
+}
+ol.calendar-items li.calendar-item {
+  box-sizing: border-box;
+  margin: 3% 0%;
+  padding: 3%;
+  display: block;
+  width: 100%;
+  background-color: white;
+  -webkit-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
+  -moz-box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
+  box-shadow: 0px 5px 28px 0px rgba(50, 50, 50, 0.19);
+}
+ol.calendar-items li.calendar-item ul.event-details {
+  font-size: 0.9em;
+  color: silver;
+  font-weight: 100;
+}
+ol.calendar-items li.calendar-item ul.event-details span {
+  font-weight: 300;
+  display: inline-block;
+  width: 100px;
 }
