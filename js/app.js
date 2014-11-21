@@ -1,4 +1,4 @@
-(function (undefined) {
+(function (document) {
 
   var util = {
     'set':function(obj){
@@ -254,7 +254,7 @@
 
   });
 
-  application.controller('MainController', function ($scope, GoogleAuth, GoogleCalendar) {
+  application.controller('MainController', function ($scope, GoogleAuth, GoogleCalendar,$window) {
 
     $scope.google_auth = GoogleAuth;
     $scope.google_calendar = GoogleCalendar;
@@ -364,9 +364,12 @@
 
     $scope.event_copy = angular.copy($scope.event);
 
+    $scope.event_form_reset = false;
+
     $scope.resetEvent = function(){
+      $scope.event_form_reset = true;
       $scope.event = angular.copy($scope.event_copy);
-      angular.element('form[name="addEvent"]').removeClass('ng-submitted');
+
     }
 
 
@@ -382,6 +385,7 @@
 
     $scope.createEvent = function () {
       var valid = $scope.addEvent.$valid;
+      $scope.event_form_reset = false;
       if (valid) {
         $scope.google_calendar.createEvent($scope.event).then(function(){
           //at this point we may not necessarily have an active calendar
@@ -389,7 +393,9 @@
             $scope.getListForSelectedCalendar($scope.google_calendar.getActiveCalendar());
           }
           $scope.addEvent.$submitted = false;
+          //save it
           console.log($scope.addEvent);
+          //this will reset
           $scope.resetEvent();
 
         });
@@ -478,4 +484,4 @@
 
 
 
-})(undefined); //no global namespace pollution
+})(document); //no global namespace pollution

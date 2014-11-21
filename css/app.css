@@ -345,7 +345,7 @@ div.error-light {
   font-weight: 100;
   padding: 10px;
 }
-form.ng-submitted .error:not(.ng-valid) {
+form.ng-submitted:not(.reset) .error:not(.ng-valid) {
   -webkit-box-shadow: 1px 5px 14px 0px rgba(255, 0, 34, 0.5);
   -moz-box-shadow: 1px 5px 14px 0px rgba(255, 0, 34, 0.5);
   box-shadow: 1px 5px 14px 0px rgba(255, 0, 34, 0.5);

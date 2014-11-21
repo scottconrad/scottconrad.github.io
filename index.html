@@ -41,7 +41,7 @@
       <div class="error-light" ng-show="!authenticatedAndValid()">
         You must authenticate to add an event to a calendar.
       </div>
-      <form name="addEvent" novalidate ng-show="authenticatedAndValid()">
+      <form name="addEvent" novalidate ng-class="{'reset':event_form_reset}" ng-show="authenticatedAndValid()">
         <fieldset>
           <legend>
             Create New Event
