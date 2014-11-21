@@ -1,5 +1,20 @@
 (function (undefined) {
 
+  var util = {
+    'set':function(obj){
+      return (typeof obj !== "undefined" && obj !== null);
+    },
+    'empty':function(obj){
+      if(!this.set(obj)) return true;
+      return this.isArray(obj) && obj.length === 0;
+
+    },
+    'isArray':function(obj){
+      return toString.call(obj) === '[object Array]';
+    }
+  }
+
+
   var google_module = angular.module('Google', []);
 
   google_module.service('GoogleAuth', function ($location, $http, $rootScope) {
@@ -20,7 +35,7 @@
             access_token = decodeURIComponent(m[2]);
             this.setTokenValid();
             this.setTokenRejected(false);
-            localStorage.setItem('mobiquity.access_token',access_token);
+            localStorage['mobiquity_access_token'] = access_token;
           }
         }
       },
@@ -45,13 +60,16 @@
       setTokenRejected:function(bool){
         token_rejected = bool;
       },
-      populateTokenFromLocalStorage:function(){
-        var mob_access_token = localStorage.get('mobiquity.access_token');
+      populateAccessTokenFromLocalStorage:function(){
+        var mob_access_token = localStorage['mobiquity_access_token'];
         //there is an api to check if an access token is invalid but I didn't implement it
-        if(mob_access_token !== null) access_token = mob_access_token;
+        if(mob_access_token !== null) {
+          token_valid = true; //we trust that it's still valid, the first request again triggers an error if it isn't
+          access_token = mob_access_token;
+        }
         //while we are using it.. the first request will trigger an error
       }
-    }l
+    }
 
     //ugh
     $rootScope.$on('authentication.invalid', function () {
@@ -72,20 +90,20 @@
     var auth = GoogleAuth; //i know this isn't exactly necessary but I think its easier to follow
     var active_calendar = null;
 
-    return {
+    var obj = {
       getAuthHeaderData: function () {
         return {'Authorization': 'Bearer ' + auth.getAccessToken()}
 
       },
 
       getActiveCalendarName:function(){ //i should call get get summary but I think name is better
-        if(active_calendar && active_calendar.summary) return active_calendar.summary;
+        if(util.set(active_calendar) && util.set(active_calendar.summary)) return active_calendar.summary;
       },
 
       getListForDate: function (date) {
         var deferred = $q.defer();
         //code smell.. i know i know.. on a deadline
-        if (!GoogleAuth.getAccessToken() || !active_calendar) {
+        if (!GoogleAuth.getAccessToken() || !util.set(active_calendar)) {
           deferred.resolve([]);
           return deferred.promise;
         }
@@ -157,13 +175,6 @@
 
       createEvent: function (data) {
 
-        //translate the data into something it wants....
-
-        //build the data
-
-        //
-
-
         var start_hour = data.start.hour;
 
         var end_hour = data.end.hour;
@@ -191,13 +202,29 @@
         });
       },
       setActiveCalendar:function(calendar){
+        localStorage['mobiquity_active_calendar'] = JSON.stringify(calendar);
         active_calendar = calendar;
       },
       getActiveCalendar:function(){
-        // i should use a get set here.. a bit verbose
+
         return active_calendar;
-      }
+      },
+      populateActiveCalendarFromLocalStorage:function(){
+        var local_storage_active_calendar = localStorage['mobiquity_active_calendar'];
+        if(util.set(local_storage_active_calendar)) {
+          var cal = JSON.parse(local_storage_active_calendar);
+          active_calendar = cal;
+        }
+
+        return cal;
+        }
     }
+
+    obj.populateActiveCalendarFromLocalStorage();
+
+    return obj;
+
+
   });
 
   var application = angular.module('Mobiquity.googleCalendar', ['Google']);
@@ -313,8 +340,7 @@
     $scope.showAuthenticationError = function(){
 
       return $scope.google_auth.getAccessToken() &&
-        $scope.google_auth.getAccessToken().length > 0
-        && $scope.google_auth.getTokenRejected();
+        $scope.google_auth.getAccessToken().length > 0 && $scope.google_auth.getTokenRejected();
     }
 
     $scope.createEvent = function () {
@@ -322,7 +348,9 @@
       if (valid) {
         $scope.google_calendar.createEvent($scope.event).then(function(){
           //at this point we may not necessarily have an active calendar
-          if($scope.google_calendar.getActiveCalendar()) $scope.getListForSelectedCalendar($scope.google_calendar.getActiveCalendar());
+          if(util.set($scope.google_calendar.getActiveCalendar())){
+            $scope.getListForSelectedCalendar($scope.google_calendar.getActiveCalendar());
+          }
           $scope.addEvent.$setSubmitted(false);
         });
       }
@@ -368,18 +396,15 @@
     });
 
     $scope.getEventsForDate = function () {
-
       $scope.google_calendar.getListForDate($scope.selected_date).then(function (data) {
-        $scope.calendar_events = data;
+        $scope.current_day_events = data;
       });
     }
 
 
 
     $scope.dateChanged = function(){
-      $scope.google_calendar.getListForCurrentDate().then(function (data) {
-        $scope.current_day_events = data;
-      });
+      $scope.getEventsForDate();
     }
 
 
@@ -388,6 +413,12 @@
     $scope.getActiveCalendarName = function(){
       if($scope.calendar && $scope.calendar.hasOwnProperty('summary')) return $scope.calendar.summary;
     }
+
+    if($scope.google_calendar.getActiveCalendar()) {
+      $scope.calendar = $scope.google_calendar.getActiveCalendar();
+      $scope.getListForSelectedCalendar();
+    }
+
 
   });
 
