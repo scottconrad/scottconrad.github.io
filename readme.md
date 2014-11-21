@@ -34,7 +34,9 @@ I also intentionally didn't use the GAPI client. I could have used it and genera
 * Authenticate and select a calendar, the selected date(defaults to today) will be shown. If you change the date, the list updates.
 * I never understood this one and I emailed to clarify. I would and probably should have just parsed a public rss feed for a calendar but the request was just odd. Technically I could have just loaded in the calendar embedded and solved the requirement but obviously that isn't what you were looking for.  I'm happy to explain further.
 * This works fine, its the form on the left side. Please note when you add an event it updates the list as well for the selected calendar.
+
 ##Additional Functionality
+
 * This is a bit of a dumb example from a UI perspective but the elements stack on an ipad
 * I used angular from the start, the recruiter said it was ok since I had planned to implement everything
 * I am using gulp that builds the .less into css
