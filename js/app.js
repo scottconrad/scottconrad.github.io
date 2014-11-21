@@ -61,46 +61,7 @@
   google_module.service('GoogleCalendar', function ($location, $http, GoogleAuth, $q) {
 
     var auth = GoogleAuth; //i know this isn't exactly necessary but I think its easier to follow
-    var active_calendar = {
-      "kind": "calendar#calendarListEntry",
-      "etag": "\"1416500255158000\"",
-      "id": "scott@honopu.com",
-      "summary": "Mobiquity",
-      "description": "This is the Mobiquity Demo Calendar",
-      "timeZone": "America/New_York",
-      "colorId": "17",
-      "backgroundColor": "#9a9cff",
-      "foregroundColor": "#000000",
-      "selected": true,
-      "accessRole": "owner",
-      "defaultReminders": [
-        {
-          "method": "popup",
-          "minutes": 10
-        }
-      ],
-      "notificationSettings": {
-        "notifications": [
-          {
-            "type": "eventCreation",
-            "method": "email"
-          },
-          {
-            "type": "eventChange",
-            "method": "email"
-          },
-          {
-            "type": "eventCancellation",
-            "method": "email"
-          },
-          {
-            "type": "eventResponse",
-            "method": "email"
-          }
-        ]
-      },
-      "primary": true
-    }
+    var active_calendar = null;
 
     return {
       getAuthHeaderData: function () {
@@ -133,7 +94,8 @@
           'params': {
             'timeMin': min_time,
             'timeMax': max_time,
-            'orderBy':'startTime'
+            'orderBy':'startTime',
+            'singleEvents':true
           },
           'url': 'https://www.googleapis.com/calendar/v3/calendars/' + active_calendar.toString() + '/events',
           'headers': this.getAuthHeaderData()
@@ -175,7 +137,7 @@
         active_calendar = id;
         $http({
           'method': 'GET',
-          'url': 'https://www.googleapis.com/calendar/v3/calendars/' + id.toString() + '/events?orderBy=startTime',
+          'url': 'https://www.googleapis.com/calendar/v3/calendars/' + id.toString() + '/events?orderBy=startTime&singleEvents=true',
           'headers': this.getAuthHeaderData()
         }).success(function (data) {
           //get ourselves a list we can populate a dropdown from

@@ -257,7 +257,7 @@ form {
 }
 .w20 {
   width: 20%;
-  min-width: 120px;
+  min-width: 90px;
 }
 .w70 {
   width: 70%;
@@ -330,4 +330,16 @@ ol.calendar-items li.calendar-item ul.event-details span {
   font-weight: 300;
   display: inline-block;
   width: 100px;
+}
+div.error-light {
+  border: 1px red solid;
+  background-color: rgba(255, 0, 34, 0.3);
+  color: white;
+  font-weight: 100;
+  padding: 10px;
+}
+form.ng-submitted .error:not(.ng-valid) {
+  -webkit-box-shadow: 1px 5px 14px 0px rgba(255, 0, 34, 0.5);
+  -moz-box-shadow: 1px 5px 14px 0px rgba(255, 0, 34, 0.5);
+  box-shadow: 1px 5px 14px 0px rgba(255, 0, 34, 0.5);
 }

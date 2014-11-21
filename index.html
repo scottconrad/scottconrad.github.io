@@ -32,7 +32,10 @@
 
     </div>
     <div class="section">
-      <form name="addEvent" novalidate>
+      <div class="error-light" ng-show="!authenticatedAndValid()">
+        You must authenticate to add an event to a calendar.
+      </div>
+      <form name="addEvent" novalidate ng-show="authenticatedAndValid()">
 
         <fieldset>
           <legend>
@@ -61,15 +64,15 @@
           <h2>Start</h2>
           <select name="event_start_hours" required ng-model="event.start.hour"
                   ng-class="{'error':addEvent.event_start_hours.$error}" ng-options="i for i in hours" class="w20">
-            <option value="">Choose Hour</option>
+            <option value="">--</option>
           </select>:
           <select name="event_start_minutes" required ng-class="{'error':addEvent.event_start_minutes.$error}" class="w20"
                   ng-model="event.start.minute" ng-options="i for i in minutes">
-            <option value="">Choose Minute</option>
+            <option value="">--</option>
           </select>
           <select name="event_start_meridian" ng-class="{'error':addEvent.event_start_meridian.$error}" class="w20" required
                   ng-model="event.start.meridian">
-            <option value="">Choose AM/PM</option>
+            <option value="">am/pm</option>
             <option value="1">am</option>
             <option value="2">pm</option>
           </select>
@@ -78,15 +81,15 @@
 
           <select name="event_end_hours" required ng-model="event.end.hour"
                   ng-class="{'error':addEvent.event_end_hours.$error}" ng-options="i for i in hours" class="w20">
-            <option value="">Choose Hour</option>
+            <option value="">--</option>
           </select>:
           <select name="event_end_minutes" required ng-class="{'error':addEvent.event_end_minutes.$error}"
                   ng-model="event.end.minute" ng-options="i for i in minutes" class="w20">
-            <option value="">Choose Minute</option>
+            <option value="">--</option>
           </select>
           <select name="event_end_meridian" ng-class="{'error':addEvent.event_end_meridian.$error}" required class="w20"
                   ng-model="event.end.meridian">
-            <option value="">Choose AM/PM</option>
+            <option value="">am/pm</option>
             <option value="1">am</option>
             <option value="2">pm</option>
           </select>
