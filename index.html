@@ -59,7 +59,7 @@
           <label>Choose Date:</label>
           <input type="date" ng-model="event.start.date" name="event_start_date" required
                  ng-class="{'error':addEvent.event_start_date.$error}"
-                 ng-change="dateChanged()"/>
+                 />
 
           <h2>Start</h2>
           <select name="event_start_hours" required ng-model="event.start.hour"

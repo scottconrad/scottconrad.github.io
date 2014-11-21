@@ -133,13 +133,8 @@
         return deferred.promise;
       },
 
-      getListForCurrentDate: function () {
-        var d = new Date();
-        return this.getListForDate(d);
-      },
-
-
       getList: function () {
+        var _this = this;
         var deferred = $q.defer();
         if (!GoogleAuth.getAccessToken()) {
           deferred.resolve([]);
@@ -150,10 +145,11 @@
           'url': 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
           'headers': this.getAuthHeaderData()
         }).success(function (data) {
-          //get ourselves a list we can populate a dropdown from
           deferred.resolve(data.items);
+          });
 
-        });
+
+
         return deferred.promise;
       },
       getListForCalendarId: function (id) {
@@ -229,7 +225,7 @@
 
   var application = angular.module('Mobiquity.googleCalendar', ['Google']);
 
-  application.config(function ($locationProvider, $httpProvider, $injector) {
+  application.config(function ($locationProvider, $httpProvider) {
     $locationProvider.html5Mode({
       enabled: true,
       requireBase: false
@@ -257,7 +253,7 @@
 
   });
 
-  application.controller('MainController', function ($scope, GoogleAuth, GoogleCalendar, $location, $window, $timeout) {
+  application.controller('MainController', function ($scope, GoogleAuth, GoogleCalendar) {
 
     $scope.google_auth = GoogleAuth;
     $scope.google_calendar = GoogleCalendar;
@@ -332,6 +328,46 @@
       'calendar':null
     }
 
+    $scope.$watch('event',function(){
+      console.log("we got an event");
+      var start_hour = parseInt($scope.event.start.hour);
+
+      var start_minute = parseInt($scope.event.start.minute);
+
+      var start_meridian = parseInt($scope.event.start.meridian);
+
+      var end_hour = parseInt($scope.event.end.hour);
+
+      var end_minute = parseInt($scope.event.end.minute);
+
+      var end_meridian = parseInt($scope.event.end.meridian);
+
+      //i could have just made an alert on the interceptor but I don't want them to get to that point
+
+      if(
+        (start_hour > end_hour && start_meridian <= end_meridian ) ||
+        (start_hour >= end_hour && start_meridian <= end_meridian && start_hour == end_hour && start_minute <= end_minute)
+      ){
+        //we just up it an hour
+        $scope.event.end.hour = $scope.event.start.hour + 1;
+
+
+      }
+      if(start_meridian > end_meridian){
+        $scope.event.end.meridian = start_meridian;
+      }
+      
+    },true);
+
+
+
+    $scope.event_copy = angular.copy($scope.event);
+
+    $scope.resetEvent = function(){
+      $scope.event = angular.copy($scope.event_copy);
+      angular.element('form[name="addEvent"]').removeClass('ng-submitted');
+    }
+
 
     $scope.authenticatedAndValid = function(){
       return $scope.google_auth.tokenValid() && !$scope.google_auth.getTokenRejected();
@@ -351,18 +387,34 @@
           if(util.set($scope.google_calendar.getActiveCalendar())){
             $scope.getListForSelectedCalendar($scope.google_calendar.getActiveCalendar());
           }
-          $scope.addEvent.$setSubmitted(false);
+          $scope.addEvent.$submitted = false;
+          console.log($scope.addEvent);
+          $scope.resetEvent();
+
         });
       }
     }
 
-    ///////
-    $scope.google_auth.parseGoogleAuthTokenFromCurrentLocation();
 
+    $scope.google_auth.parseGoogleAuthTokenFromCurrentLocation();
 
     $scope.getCalendarList = function () {
       $scope.google_calendar.getList().then(function (data) {
         $scope.calendars = data;
+        //do we already have an active calendar?
+        var active_calendar = $scope.google_calendar.getActiveCalendar();
+
+        angular.forEach(data, function(calendar){
+          //there's probably a better way to do this, but we need to look at our existing calendar
+          //then set it if we happened to load it from local storage on initial load
+          var calendar_id = encodeURIComponent(calendar.id);
+          var active_calendar_id = active_calendar;
+          if(calendar_id == active_calendar_id){
+
+            $scope.calendar = calendar;
+            $scope.google_calendar.setActiveCalendar(calendar);
+          }
+        });
       });
     }
 
@@ -416,10 +468,13 @@
 
     if($scope.google_calendar.getActiveCalendar()) {
       $scope.calendar = $scope.google_calendar.getActiveCalendar();
+      //so we set this from local storage.. but we need to update it on the model here.. it should be in the service
+      //but there isn't time to refactor.. just noticed this
       $scope.getListForSelectedCalendar();
     }
 
-
   });
+
+
 
 })(undefined); //no global namespace pollution
