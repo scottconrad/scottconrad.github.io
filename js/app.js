@@ -260,7 +260,7 @@
     $scope.google_calendar = GoogleCalendar;
 
     $scope.authorize_url = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=http%3A%2F%2Fhonopu.com' +
-    '%2Fmobiquity&response_type=token&client_id=' + $scope.google_auth.getClientID() + '&scope=email+https%3A%2F%2F' +
+    '%2Fmobiquity%2F?workaround=1&response_type=token&client_id=' + $scope.google_auth.getClientID() + '&scope=email+https%3A%2F%2F' +
     'www.googleapis.com%2Fauth%2Fcalendar+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar&approval_prompt=force';
 
 
