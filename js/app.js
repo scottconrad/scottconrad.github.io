@@ -70,7 +70,7 @@
       },
 
       getActiveCalendarName:function(){ //i should call get get summary but I think name is better
-       if(active_calendar && active_calendar.summary) return active_calendar.summary;
+        if(active_calendar && active_calendar.summary) return active_calendar.summary;
       },
 
       getListForDate: function (date) {
@@ -88,7 +88,7 @@
         var max_time = day2.startOf('day').add(1, 'day').toISOString();
 
         var deferred = $q.defer();
-        console.log('get list was called');
+
         $http({
           'method': 'GET',
           'params': {
@@ -118,7 +118,6 @@
           deferred.resolve([]);
           return deferred.promise;
         }
-        console.log('get list was called');
         $http({
           'method': 'GET',
           'url': 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
@@ -137,7 +136,8 @@
         active_calendar = id;
         $http({
           'method': 'GET',
-          'url': 'https://www.googleapis.com/calendar/v3/calendars/' + id.toString() + '/events?orderBy=startTime&singleEvents=true',
+          'url': 'https://www.googleapis.com/calendar/v3/calendars/' + id.toString() + '/events?orderBy=startTime&' +
+          'singleEvents=true',
           'headers': this.getAuthHeaderData()
         }).success(function (data) {
           //get ourselves a list we can populate a dropdown from
@@ -205,8 +205,8 @@
       return {
         'responseError': function (resp) {
           if (resp.status == 401) {
-            //$injector.get('GoogleAuth').setInvalidToken();  not sure why this isn't working... says it isn't found, but i'm using it
-            //I know this is a judo
+            //$injector.get('GoogleAuth').setInvalidToken();  not sure why this isn't working... says it isn't found,
+            // but i'm using it I know this is a judo and i'm not happy with it
             $rootScope.$broadcast('authentication.invalid'); //ugh i hate this perhaps I can circle back later
           }else{
             alert("There was an error retrieving data from the google api");
@@ -250,7 +250,7 @@
       }
       $scope.minutes.push(increment);
     }
-    
+
     $scope.calendar_id = null;
 
     $scope.calendars = [];
@@ -265,7 +265,7 @@
       console.log("the date is:",date);
       if (!format) format = "MMMM Do, YYYY [at] h:mma";
       var formatted_date = moment(date).format(format);
-     return formatted_date;
+      return formatted_date;
 
     }
 
@@ -307,7 +307,9 @@
 
     $scope.showAuthenticationError = function(){
 
-      return $scope.google_auth.getAccessToken() && $scope.google_auth.getAccessToken().length > 0 && $scope.google_auth.getTokenRejected();
+      return $scope.google_auth.getAccessToken() &&
+        $scope.google_auth.getAccessToken().length > 0
+        && $scope.google_auth.getTokenRejected();
     }
 
     $scope.createEvent = function () {
@@ -352,7 +354,7 @@
 
       $scope.dateChanged(); //trigger this here since that happens about as often but that can trigger a day update..
       //but you can selet a date and not change the calendar so it should update
-      }
+    }
 
     $scope.$watch('google_auth.access_token', function () {
       $scope.getCalendarList(); //this could probably be named better.. slike populate calendar list
@@ -370,7 +372,6 @@
 
     $scope.dateChanged = function(){
       $scope.google_calendar.getListForCurrentDate().then(function (data) {
-        //console.log("our current day list is:", data);
         $scope.current_day_events = data;
       });
     }
@@ -379,7 +380,7 @@
 
 
     $scope.getActiveCalendarName = function(){
-     if($scope.calendar && $scope.calendar.hasOwnProperty('summary')) return $scope.calendar.summary;
+      if($scope.calendar && $scope.calendar.hasOwnProperty('summary')) return $scope.calendar.summary;
     }
 
   });
