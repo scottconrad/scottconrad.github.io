@@ -60,6 +60,10 @@
 
       },
 
+      getActiveCalendarName:function(){
+        if(active_calendar && active_calendar.name) return active_calendar.name;
+      },
+
       getListForDate: function (date) {
         var deferred = $q.defer();
         //code smell.. i know i know.. on a deadline
@@ -202,6 +206,11 @@
   });
 
   application.controller('MainController', function ($scope, GoogleAuth, GoogleCalendar, $location, $window, $timeout) {
+
+    $scope.authorize_url = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=http%3A%2F%2Fhonopu.com' +
+    '%2Fmobiquity&response_type=token&client_id={{google_auth.getClientID()}}&scope=email+https%3A%2F%2F' +
+    'www.googleapis.com%2Fauth%2Fcalendar+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar&approval_prompt=force';
+
 
     $scope.hours = [];
 

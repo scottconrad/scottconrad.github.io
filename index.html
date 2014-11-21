@@ -2,259 +2,143 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
-  <title>Mobiquity Challenge</title>
+  <title>Mobiquity Challenge :: Google Calendar</title>
   <link rel="shortcut icon" href="http://d29vcfpn0e63gd.cloudfront.net/sites/all/themes/mobiquity/favicon.ico"
         type="image/vnd.microsoft.icon"/>
-  <link rel="stylesheet" type="text/css"
-        href="http://fonts.googleapis.com/css?family=Droid+Sans">
-  <style type="text/css">
-
-  body {
-    background-color: #f9f9f9;
-    font-family:'Droid Sans' ;
-    box-sizing: border-box;
-  }
-
-    .w90{
-      width:90%;
-
-    }
-
-    .centered{
-      margin:0 auto;
-    }
-
-    ol.calendar-items li.calendar-item{
-      padding:1%;
-      display:block;
-      float:left;
-      list-style-type: none;
-      outline:1px dashed blue;
-
-    }
-
-    div.w50{
-
-      width:50%;
-      padding:1%;
-    }
-
-    .left{
-      float:left;
-    }
-    .right{
-      float:right;
-    }
-
-    .clearfix{
-      clear:both;
-      display:table-cell;
-      width:100%;
-    }
-
-    .outline{
-      outline:1px silver dashed;
-    }
-
-  </style>
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans">
+  <link rel="stylesheet" type="text/css" href="css/app.css" media="screen">
   <script src="http://code.angularjs.org/1.3.3/angular.js"></script>
-  <script src="http://code.angularjs.org/1.3.3/angular-route.min.js"></script>
-
-  <script>
-    (function(undefined) {
-
-      var exists = function(value){
-        return typeof value !== "undefined";
-      }
-
-      var empty = function(arr){
-        console.log(arr);
-        return typeof arr === "Array" && arr.length < 1;
-      }
-
-
-
-      var google_module = angular.module('Google',[]);
-
-      google_module.service('GoogleAuth',function($location,$http){
-
-        var access_token = null;
-        var client_id = '682690953089-pcokcr123r9m8v602p0rv9bi9vkfcsc0.apps.googleusercontent.com';
-        var obj = {
-          ajaxing: false, //are we doing something?
-          parseGoogleAuthTokenFromCurrentLocation: function () {
-            //lifted straight from google, will refactor if I have time
-            var queryString = location.hash.substring(1),
-              regex = /([^&=]+)=([^&]*)/g, m;
-            while (m = regex.exec(queryString)) {
-              if (m[1] == "access_token") {
-                access_token = decodeURIComponent(m[2]);
-              }
-            }
-
-            console.log('the access_token is:', access_token);
-
-
-          },
-          getClientID: function () {
-            return client_id;
-          },
-          getAccessToken:function(){
-            return access_token;
-          }
-        }
-        return obj;
-
-      });
-
-      google_module.service('GoogleCalendar', function ($location, $http,GoogleAuth,$q) {
-
-
-        return {
-          getAuthHeaderData: function () {
-            return {'Authorization': 'Bearer ' + GoogleAuth.getAccessToken()}
-
-          },
-          getList: function () {
-            var deferred = $q.defer();
-            if(!GoogleAuth.getAccessToken()){
-              deferred.resolve([]);
-              return deferred.promise;
-            }
-            console.log('get list was called');
-            $http({
-              'method': 'GET',
-              'url': 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
-              'headers': this.getAuthHeaderData()
-            }).success(function (data) {
-              //get ourselves a list we can populate a dropdown from
-              var list = [];
-
-              if(exists(data) && exists(data.items) && !empty(data.items)){
-               deferred.resolve(data.items);
-              }
-            });
-            return deferred.promise;
-          },
-          getListForCalendarId:function(id){
-
-            var deferred = $q.defer();
-            console.log('get list was called');
-            $http({
-              'method': 'GET',
-              'url': 'https://www.googleapis.com/calendar/v3/calendars/' + id.toString() + '/events',
-              'headers': this.getAuthHeaderData()
-            }).success(function (data) {
-              //get ourselves a list we can populate a dropdown from
-              var list = [];
-
-              if (exists(data) && exists(data.items) && !empty(data.items)) {
-                deferred.resolve(data.items);
-              }
-            });
-            return deferred.promise;
-
-          }
-        }
-      });
-
-      var application = angular.module('Mobiquity.googleCalendar', [
-        'ngRoute','Google']);
-
-      application.config(function($routeProvider,$locationProvider){
-        $locationProvider.html5Mode({
-          enabled: true,
-          requireBase: false
-        });
-      });
-
-      application.run(function () {
-
-      });
-
-      application.controller('MainController', function ($scope,GoogleAuth,GoogleCalendar,$location,$window) {
-        $scope.google_auth = GoogleAuth;
-        $scope.google_calendar = GoogleCalendar;
-
-        $scope.calendar_id = null;
-
-        $scope.calendars = [];
-        $scope.calendar_events = [];
-
-        $scope.dateChanged = function(){
-
-        console.log("the date changed");
-        }
-
-
-
-        $scope.google_auth.parseGoogleAuthTokenFromCurrentLocation();
-
-
-        $scope.getCalendarEvents = function(){
-
-
-        }
-        $scope.getCalendarList = function(){
-          $scope.google_calendar.getList().then(function(data){
-            $scope.calendars = data;
-          });
-        }
-
-        $scope.getListForSelectedCalendar = function(){
-
-          var encoded = encodeURIComponent($scope.calendar_id); //
-
-
-          $scope.google_calendar.getListForCalendarId(encoded).then(function(data){
-            $scope.calendar_events = data;
-          });
-        }
-
-        $scope.$watch('google_auth.access_token',function(){
-          $scope.getCalendarList(); //this could probably be named better.. like populate calendar list
-
-        });
-
-
-      });
-
-    })(undefined); //no global namespace pollution
-
-  </script>
+  <script type="text/javascript" src="js/moment.min.js"></script>
 </head>
 <body ng-app="Mobiquity.googleCalendar" ng-controller="MainController">
-<div class="w90 centered" style="outline:1px red solid;">
+<div class="w90 centered">
+  <div class="auth-error" ng-show="google_auth.getInvalidToken()">
+    <h2>There was an error with your google token. Please Authorize Again.</h2>
 
-
-
-
-  <div class="w50 left outline"><h2>Auth</h2>
-    <!-- I didn't want to break indent here, I know this is way too long-->
-    <a ng-href="https://accounts.google.com/o/oauth2/auth?redirect_uri=http%3A%2F%2Fhonopu.com%2Fmobiquity&response_type=token&client_id={{google_auth.getClientID()}}&scope=email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar&approval_prompt=force">Authorize</a>
   </div>
-  <div class="w50 right outline">
-    <form id="select-date">
-      <div>
-        <label for="">Choose Date: <input type="date" ng-model="selected_date" ng-change="dateChanged()"/></label>
-        <input type="submit" value="Choose Date"/>
-      </div>
 
+  <div class="w30 left outline">
+
+    <a class="button blue large" href="{{::authorize_url}}">Authorize with Google</a>
+    <div class="clearfix"></div>
+
+    <select ng-model="calendar_id" ng-options="i.id as i.summary for i in calendars" class="w20m clear"
+            ng-change="getListForSelectedCalendar()">
+      <option value="">Please Choose A Calendar</option>
+    </select>
+
+
+        <label for="date-picker">Choose Date To Display:</label> <input type="date" id="date-picker" ng-model="selected_date" ng-change="dateChanged()"/>
+
+
+    <form name="addEvent" novalidate>
+
+      <fieldset>
+        <legend>
+          Create New Event
+        </legend>
+
+      <select ng-model="event.calendar_id" ng-class="{'error':addEvent.event_calendar_id.$error}"
+              name="event_calendar_id" ng-change="updateEventDataFromCalendar(i)"
+              ng-options="i.id as i.summary for i in calendars" required>
+        <option value="">Choose Calendar</option>
+      </select><br/>
+
+      <input type="text" placeholder="Event Name" name="event_name" ng-class="{'error':addEvent.event_name.$error}"
+             ng-model="event.name" required ng-required/>
+
+      <div class="clearfix"></div>
+      <textarea ng-model="event.description" placeholder="Event Description" required name="event_description"
+                ng-class="{'error':addEvent.event_description.$error}"></textarea><br/>
+
+
+      <label>Choose Date:</label>
+      <input type="date" ng-model="event.start.date" name="event_start_date" required
+             ng-class="{'error':addEvent.event_start_date.$error}"
+             ng-change="dateChanged()"/>
+
+      <h2>Start</h2>
+      <select name="event_start_hours" required ng-model="event.start.hour"
+              ng-class="{'error':addEvent.event_start_hours.$error}" ng-options="i for i in hours" class="w20">
+        <option value="">Choose Hour</option>
+      </select>:
+      <select name="event_start_minutes" required ng-class="{'error':addEvent.event_start_minutes.$error}" class="w20"
+              ng-model="event.start.minute" ng-options="i for i in minutes">
+        <option value="">Choose Minute</option>
+      </select>
+      <select name="event_start_meridian" ng-class="{'error':addEvent.event_start_meridian.$error}" class="w20" required
+              ng-model="event.start.meridian">
+        <option value="">Choose AM/PM</option>
+        <option value="1">am</option>
+        <option value="2">pm</option>
+      </select>
+
+      <h2>Ending</h2>
+
+      <select name="event_end_hours" required ng-model="event.end.hour"
+              ng-class="{'error':addEvent.event_end_hours.$error}" ng-options="i for i in hours" class="w20">
+        <option value="">Choose Hour</option>
+      </select>:
+      <select name="event_end_minutes" required ng-class="{'error':addEvent.event_end_minutes.$error}"
+              ng-model="event.end.minute" ng-options="i for i in minutes" class="w20">
+        <option value="">Choose Minute</option>
+      </select>
+      <select name="event_end_meridian" ng-class="{'error':addEvent.event_end_meridian.$error}" required class="w20"
+              ng-model="event.end.meridian">
+        <option value="">Choose AM/PM</option>
+        <option value="1">am</option>
+        <option value="2">pm</option>
+      </select>
+  </fieldset>
+      <div class="clearfix"></div>
+      <input type="submit" class="button blue large" ng-submit ng-click="createEvent()" value="Create Event"/>
     </form>
+
+
   </div>
-  <div class="clearfix"></div>
 
 
-  <select ng-model="calendar_id" ng-options="i.id as i.summary for i in calendars"
-          ng-change="getListForSelectedCalendar()">
-    <option value="">Please Choose A Calendar</option>
-  </select>
+  <div class="w70 right outline">
 
-  <ol class="calendar-items">
-    <li class="calendar-item" ng-repeat="event in calendar_events">{{event | json }}</li>
-  </ol>
+
+
+    <h3>Today's Event<span ng-show="today_events.length > 1">s</span> for {{::google_calendar.getActiveCalendarName()}} </h3>
+    <ol class="calendar-items">
+      <li class="calendar-item" ng-repeat="event in today_events">
+        <div class="inner">
+          <div><img ng-src="{{event.gadget.iconLink}}" class="calendar-item-icon" alt="{{::event.summary}}"/>
+
+            <h3>{{::event.summary}}</h3>
+            {{event | json }}
+          </div>
+        </div>
+      </li>
+    </ol>
+
+
+    <h3>{{::google_calendar.getActiveCalendarName()}} - Events</h3>
+    <ol class="calendar-items">
+      <li class="calendar-item" ng-repeat="event in calendar_events">
+        <div class="inner">
+          <div><img ng-src="{{event.gadget.iconLink}}" class="calendar-item-icon" alt="{{::event.summary}}"/>
+
+            <h3>{{::event.summary}}</h3>
+            {{event | json }}
+          </div>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  </div>
+
+
+
+
+
+
+
 </div>
-
-</div>
+<script src="js/app.js"></script>
 </body>
 </html>
