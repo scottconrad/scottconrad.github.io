@@ -305,7 +305,8 @@
 
     }
 
-    $scope.getSelectedDateDisplay = function(format){
+    $scope.getSelectedDateDisplay = function(){
+      var format = 'MMMM do, YYYY';
       return $scope.formatEventDate(this.selected_date,format);
     }
 
@@ -325,6 +326,16 @@
         'timeZone': ''
       },
       'calendar_id': ''
+    }
+
+
+    $scope.authenticatedAndValid = function(){
+      return $scope.google_auth.tokenValid() && !$scope.google_auth.getTokenRejected();
+    }
+
+    $scope.showAuthenticationError = function(){
+
+      return $scope.google_auth.getAccessToken() && $scope.google_auth.getAccessToken().length > 0 && $scope.google_auth.getTokenRejected();
     }
 
 
@@ -376,7 +387,7 @@
 
 
     $timeout(function(){
-      //return;
+      return;
       $scope.current_day_events = [
           {
             "kind": "calendar#event",

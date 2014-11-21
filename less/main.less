@@ -47,6 +47,9 @@ body {
   &.blue{
     background-color:#2DB6CF;
   }
+  &.red{
+    background-color: #9e2518;
+  }
   &.large {
     width: 75%;
     padding: 10px 15px;
@@ -81,9 +84,9 @@ input[type="textarea"]{
 }
 
 .section{
-  border: 1px silver solid;
+  border: 1px #f3f3f3 solid;
   padding: 5%;
-  background-color: #ecf0f1;
+  background-color: #f9f9f9;
   .more-margin;
   border-radius: 5px;
   .lighter-shadow;
@@ -203,16 +206,19 @@ div.results{
 
 }
 
+.box-content{
+  box-sizing: border-box;
+  margin: 3% 0%;
+  padding: 3%;
+  display: block;
+  width: 100%;
+  background-color: white;
+  .shadow;
+}
 
 ol.calendar-items{
   li.calendar-item{
-    box-sizing: border-box;
-    margin:3% 0%;
-    padding:3%;
-    display:block;
-    width:100%;
-    background-color: white;
-    .shadow;
+    .box-content;
 
     ul.event-details{
       font-size:0.9em;
